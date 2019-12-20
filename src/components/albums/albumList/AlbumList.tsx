@@ -11,9 +11,9 @@ interface IAlbumList{
 
 const AlbumList: React.FC<IAlbumList> = ({albums}) => {
     return (
-        <>
+        <div className="mt-5">
         {albums.length === 0 ? <NoData title="No Albums found"/> : albums.map(album => <Album title={album.title} id={album.id} key={album.id}/> ) }
-        </>
+        </div>
     )
 }
 

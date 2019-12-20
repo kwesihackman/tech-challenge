@@ -1,0 +1,14 @@
+.thumbnail-card{
+    widows: 150px;
+    height: 150px;
+    background-color: white;
+    margin: 1rem;
+    -moz-osx-font-smoothing: grayscale;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    transition: transform 0.25s ease-out;
+}
+
+.thumbnail-card:hover {
+    transform: scale(1.08);
+}

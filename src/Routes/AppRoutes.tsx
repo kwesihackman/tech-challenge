@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch, Redirect, BrowserRouter as Router} from 'react-router-dom'
+import { Route, Switch, BrowserRouter as Router} from 'react-router-dom'
 import {routes} from '../Utils/Constants'
 import Home from '../components/Home/Home'
 import NotFound from '../components/NotFound'

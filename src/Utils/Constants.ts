@@ -1,5 +1,5 @@
 export const routes = {
     home: '/',
-    album: '/albums:id'
+    album: '/album:id'
 
 }

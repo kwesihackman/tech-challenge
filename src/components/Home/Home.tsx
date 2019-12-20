@@ -16,6 +16,7 @@ const Home: React.FC = () => {
     const [selectedUserAlbums, setSelectedUserAlbums] = useState<IAlbum[]>([])
     const [errorMessage, setErrorMessage] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const [loadingAlbums, setLoadingAlbums] = useState(false)
     const dispatch = useDispatch()
 
 
@@ -27,10 +28,11 @@ const Home: React.FC = () => {
     }
 
     const fetchUserAlbums = () => {
-        selectedUserId && 
-        API.fetchUserAlbums(selectedUserId)
-            .then(response => setSelectedUserAlbums(response.data))
-            .catch(() => fetchUserAlbumsFailed())
+        setLoadingAlbums(true)
+        selectedUserId &&
+            API.fetchUserAlbums(selectedUserId)
+                .then(response => fetchUserAlbumsSuccess(response.data))
+                .catch(() => fetchUserAlbumsFailed())
     }
 
     // const fetchAlbumsPhotos = (id: number) => {
@@ -41,6 +43,7 @@ const Home: React.FC = () => {
     // }
 
     const fetchUsersSuccess = (data: IUser[]) => {
+        setSelectedUserId(1) //fetch the albums for the first user
         setIsLoading(false)
         dispatch(action.fetchUsersSuccess(data))
     }
@@ -52,17 +55,30 @@ const Home: React.FC = () => {
         })))
     }
 
+    const fetchUserAlbumsSuccess = (data: IAlbum[]) => {
+        console.log('heyyy')
+        setLoadingAlbums(false)
+        setSelectedUserAlbums(data)
+        updateUsersAlbums()
+    }
+
+    const updateUsersAlbums = () => {
+        console.log(users)
+        let user = users.find(user => user.id === 1)
+        console.log('selected user is => ', user)
+    }
+
     const fetchUsersFailed = () => {
         setIsLoading(false)
         setErrorMessage(`Something went wrong, please try again`)
     }
 
-    const fetchUserAlbumsFailed = () =>{
-        setIsLoading(false)
+    const fetchUserAlbumsFailed = () => {
+        setLoadingAlbums(false)
         setErrorMessage(`Fetching user albums failed, please try again`)
     }
 
-    
+
 
     const handleOptionSelected = (option: any) => {
         setSelectedUserId(option.currentTarget.value)
@@ -70,8 +86,8 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         fetchUserAlbums()
-        
-    }, [fetchUserAlbums])
+
+    }, [selectedUserId])
 
     useEffect(() => {
         fetchUsers()
@@ -83,24 +99,24 @@ const Home: React.FC = () => {
 
     return (
         <div className="container">
-                <div className="header">
-                    <h1 className="text-white text-center py-4">User Albums App</h1>
-                    <div className="form-inline d-flex justify-content-center">
-                        {
-                            users.length === 0 ? <NoData title={errorMessage}/> : (
-                                <div className="form-group">
-                            <label className="label">Switch User</label>
-                            <select className="form-control" placeholder="select user" onChange={(option) => handleOptionSelected(option)}>
-                                {selectOptions.map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}
-                            </select>
-                        </div>
-                            )
-                        }
-                    </div>
+            <div className="header">
+                <h1 className="text-white text-center py-4">User Albums App</h1>
+                <div className="form-inline d-flex justify-content-center">
+                    {
+                        users.length === 0 ? <NoData title={errorMessage} /> : (
+                            <div className="form-group">
+                                <label className="label">Switch User</label>
+                                <select className="form-control" placeholder="select user" onChange={(option) => handleOptionSelected(option)}>
+                                    {selectOptions.map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}
+                                </select>
+                            </div>
+                        )
+                    }
                 </div>
-                {isLoading ? <NoData title="Loading..." /> : ( selectedUserId != null ? <AlbumList albums={selectedUserAlbums}/> : <></>)
-                    
-                }
+            </div>
+            {loadingAlbums ? <NoData title="Loading.." /> : (selectedUserId != null ? <AlbumList albums={selectedUserAlbums} /> : <></>)
+
+            }
 
         </div>
     )
