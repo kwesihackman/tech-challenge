@@ -12,3 +12,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.cursor-pointer{
+  cursor: pointer;
+}
+.w-60{
+  max-width: 60%;
+}
