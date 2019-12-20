@@ -5,34 +5,43 @@ import * as action from '../../Redux/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import './home.css'
 import AlbumList from '../albums/albumList/AlbumList'
+import NoData from '../NoData'
 
 
 
 const Home: React.FC = () => {
     const users = useSelector((state: AppState) => state.users)
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
     const [selectOptions, setSelectOptions] = useState<IReactSelectOption[]>([])
-    const [selectedUserAlbums, setselectedUserAlbums] = useState<IAlbum[]>([])
+    const [selectedUserAlbums, setSelectedUserAlbums] = useState<IAlbum[]>([])
+    const [errorMessage, setErrorMessage] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
     const dispatch = useDispatch()
 
 
     const fetchUsers = () => {
+        setIsLoading(true)
         API.fetchAllUsers()
             .then(response => fetchUsersSuccess(response.data))
-            .catch((error) => console.log(error))
+            .catch(() => fetchUsersFailed())
     }
 
-    const fetchUserAlbums = (id: number) => {
-        API.fetchUserAlbums(id)
-            .then(response => setselectedUserAlbums(response.data))
-            .catch((error) => console.log('getting albums failed', error))
+    const fetchUserAlbums = () => {
+        selectedUserId && 
+        API.fetchUserAlbums(selectedUserId)
+            .then(response => setSelectedUserAlbums(response.data))
+            .catch(() => fetchUserAlbumsFailed())
     }
 
-    const fetchAlbumsPhotos = (id: number) => {
-        API.getAlbumsPhotos(id)
-            .then(response => console.log('album photos ===>', response.data))
-    }
+    // const fetchAlbumsPhotos = (id: number) => {
+
+    //     API.getAlbumsPhotos(id)
+    //         .then(response => console.log('album photos ===>', response.data))
+    //         .catch()
+    // }
 
     const fetchUsersSuccess = (data: IUser[]) => {
+        setIsLoading(false)
         dispatch(action.fetchUsersSuccess(data))
     }
 
@@ -43,11 +52,26 @@ const Home: React.FC = () => {
         })))
     }
 
-    const handleOptionSelected = (option: any) => {
-        fetchUserAlbums(option.currentTarget.value)
-        fetchAlbumsPhotos(2)
-
+    const fetchUsersFailed = () => {
+        setIsLoading(false)
+        setErrorMessage(`Something went wrong, please try again`)
     }
+
+    const fetchUserAlbumsFailed = () =>{
+        setIsLoading(false)
+        setErrorMessage(`Fetching user albums failed, please try again`)
+    }
+
+    
+
+    const handleOptionSelected = (option: any) => {
+        setSelectedUserId(option.currentTarget.value)
+    }
+
+    useEffect(() => {
+        fetchUserAlbums()
+        
+    }, [fetchUserAlbums])
 
     useEffect(() => {
         fetchUsers()
@@ -62,17 +86,21 @@ const Home: React.FC = () => {
                 <div className="header">
                     <h1 className="text-white text-center py-4">User Albums App</h1>
                     <div className="form-inline d-flex justify-content-center">
-                        <div className="form-group">
+                        {
+                            users.length === 0 ? <NoData title={errorMessage}/> : (
+                                <div className="form-group">
                             <label className="label">Switch User</label>
                             <select className="form-control" placeholder="select user" onChange={(option) => handleOptionSelected(option)}>
                                 {selectOptions.map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}
                             </select>
                         </div>
+                            )
+                        }
                     </div>
                 </div>
-                <div className="mt-5">
-                    <AlbumList albums={selectedUserAlbums}/>
-                </div>
+                {isLoading ? <NoData title="Loading..." /> : ( selectedUserId != null ? <AlbumList albums={selectedUserAlbums}/> : <></>)
+                    
+                }
 
         </div>
     )

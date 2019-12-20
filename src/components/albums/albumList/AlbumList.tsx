@@ -12,7 +12,7 @@ interface IAlbumList{
 const AlbumList: React.FC<IAlbumList> = ({albums}) => {
     return (
         <>
-        {albums.length === 0 ? <NoData title="No Albums found"/> : albums.map(album => <Album title={album.title} key={album.id}/> ) }
+        {albums.length === 0 ? <NoData title="No Albums found"/> : albums.map(album => <Album title={album.title} id={album.id} key={album.id}/> ) }
         </>
     )
 }
