@@ -1,4 +1,4 @@
-import { User, Photo, Album } from "../services/Types"
+import { IUser, IPhoto, IAlbum } from "../services/Types"
 
 export const FETCH_USERS_START = "FETCH_USERS_START"
 export const FETCH_USERS_FAILURE = "FETCH_USERS_FAILURE"
@@ -20,7 +20,7 @@ export const UPDATE_USER_SUCCESS = "UPDATE_USER_SUCCESS"
 export interface FetchUsersSuccess {
     type: typeof FETCH_USERS_SUCCESS,
     payload:{
-        users: User[]
+        users: IUser[]
     }
 }
 
@@ -48,21 +48,21 @@ export interface UpdateUserStart{
 export interface UpdateUserSuccess{
     type: typeof UPDATE_USER_SUCCESS,
     payload:{
-        user:User
+        user:IUser
     }
 }
 
 export interface FetchAlbumPhotos{
     type: typeof FETCH_PHOTOS_SUCCESS,
     payload:{
-        photos: Photo[]
+        photos: IPhoto[]
     }
 }
 
 export interface FetchAlbumsSuccess{
     type: typeof FETCH_ALBUMS_SUCCESS,
     payload:{
-        albums: Album[]
+        albums: IAlbum[]
     }
 }
 

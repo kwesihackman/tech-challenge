@@ -1,4 +1,4 @@
-import { AppState, User } from "../services/Types";
+import { AppState } from "../services/Types";
 import {AppTypes } from './actionTypes'
 import * as actionTypes from './actionTypes'
 

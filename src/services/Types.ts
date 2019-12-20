@@ -1,20 +1,20 @@
-export interface User {
+export interface IUser {
     id: number,
     name: string,
     email: string,
     website: string,
 
-    albums?:Album[]
+    albums?:IAlbum[]
 }
 
-export interface Album{
+export interface IAlbum{
     userId: number,
     id: number,
     title: string,
-    photos?:Photo[]
+    photos?:IPhoto[]
 }
 
-export interface Photo{
+export interface IPhoto{
     albumId: number,
     id: number,
     title:string,
@@ -23,7 +23,7 @@ export interface Photo{
 }
 
 export interface AppState{
-    users: User[]
+    users: IUser[]
 }
 
 export interface IReactSelectOption {
