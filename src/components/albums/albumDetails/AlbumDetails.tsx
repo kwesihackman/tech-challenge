@@ -4,6 +4,7 @@ import { Modal } from 'react-bootstrap'
 import * as API from '../../../services/API'
 import { IPhoto } from '../../../services/Types'
 import NoData from '../../NoData'
+import BackIcon from '../../../images/back_icon.svg'
 import './albumdetails.styles.css'
 
 interface Props {
@@ -39,6 +40,10 @@ const AlbumDetails: React.FC<Props> = () => {
 
     return (
         <div className="container">
+            <div className="text-white mt-5 cursor-pointer" onClick={() => history.goBack()}>
+                <img src={BackIcon} alt="Go back"/>
+                Go Back
+            </div>
             <h1 className="text-white text-center py-4">Selected Album Photos</h1>
             <div className="row">
                 {albumPhotos.length === 0 ? <NoData title="No photos found for this album" /> : (albumPhotos.map((photo, index) => (
