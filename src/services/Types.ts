@@ -1,14 +1,17 @@
 export interface User {
     id: number,
     name: string,
-    albums:Album[]
+    email: string,
+    website: string,
+
+    albums?:Album[]
 }
 
 export interface Album{
     userId: number,
     id: number,
     title: string,
-    photos:Photo[]
+    photos?:Photo[]
 }
 
 export interface Photo{
@@ -22,3 +25,8 @@ export interface Photo{
 export interface AppState{
     users: User[]
 }
+
+export interface IReactSelectOption {
+    label: string ;
+    value: number;
+  }
